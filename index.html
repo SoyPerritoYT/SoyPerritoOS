@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>SoyPerritoOS</title>
+<style>
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;font-family:system-ui,-apple-system,Segoe UI,sans-serif;background:#0b1020;color:#fff}button,input,textarea{font:inherit}
+body{overflow:hidden}.os{min-height:100vh;min-height:100svh;background:linear-gradient(135deg,#101a35,#18264a 55%,#0e1325);position:relative}
+.wall{position:absolute;inset:0;background:radial-gradient(circle at 25% 20%,rgba(77,166,255,.25),transparent 30%),radial-gradient(circle at 80% 70%,rgba(160,100,255,.2),transparent 32%)}
+.desktop{position:relative;z-index:1;height:calc(100vh - 64px);height:calc(100svh - 64px);padding:20px;display:flex;gap:22px;align-items:flex-start;flex-wrap:wrap;align-content:flex-start}
+.icon{width:88px;background:transparent;border:0;color:white;text-align:center;padding:7px;border-radius:12px;cursor:pointer}.icon:hover,.icon:focus-visible{background:rgba(255,255,255,.1);outline:none}.emoji{font-size:38px;display:block;margin-bottom:5px}.label{font-size:13px;text-shadow:0 2px 5px #000}
+.taskbar{position:absolute;z-index:20;left:0;right:0;bottom:0;height:64px;background:rgba(9,13,25,.88);backdrop-filter:blur(18px);border-top:1px solid rgba(255,255,255,.1);display:flex;align-items:center;padding:8px 12px;gap:9px}.start{height:48px;width:48px;border:0;border-radius:14px;background:#fff;color:#17213c;font-size:25px;cursor:pointer}.task{height:48px;min-width:48px;border:0;border-radius:12px;background:rgba(255,255,255,.08);color:#fff;cursor:pointer}.clock{margin-left:auto;text-align:right;font-size:13px;line-height:1.25;color:#d7deee}
+.window{position:absolute;z-index:10;left:8%;top:8%;width:min(700px,84%);height:min(500px,70%);background:rgba(19,27,48,.97);border:1px solid rgba(255,255,255,.16);border-radius:16px;box-shadow:0 20px 70px rgba(0,0,0,.45);overflow:hidden;display:flex;flex-direction:column}.bar{height:48px;display:flex;align-items:center;padding:0 12px;background:rgba(255,255,255,.06);border-bottom:1px solid rgba(255,255,255,.08)}.title{font-weight:750}.close{margin-left:auto;border:0;background:#ef6262;color:#fff;width:32px;height:32px;border-radius:9px;cursor:pointer}.content{padding:18px;overflow:auto;flex:1}.hidden{display:none!important}.menu{position:absolute;z-index:30;bottom:70px;left:12px;width:min(330px,calc(100% - 24px));background:rgba(16,23,42,.98);border:1px solid rgba(255,255,255,.15);border-radius:18px;padding:12px;box-shadow:0 20px 60px rgba(0,0,0,.5)}.menu h2{margin:6px 8px 14px}.menu button{display:block;width:100%;text-align:left;background:transparent;color:#fff;border:0;padding:12px;border-radius:10px;cursor:pointer}.menu button:hover{background:rgba(255,255,255,.08)}.notes{width:100%;height:100%;min-height:260px;background:#0e1528;color:#fff;border:1px solid #34405e;border-radius:10px;padding:12px;resize:none}.calc{max-width:300px;margin:auto}.calc input{width:100%;height:55px;background:#0c1222;color:#fff;border:1px solid #33405f;border-radius:10px;padding:10px;text-align:right;font-size:24px;margin-bottom:10px}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.grid button{height:52px;border:0;border-radius:10px;background:#263452;color:#fff;cursor:pointer}.welcome{font-size:18px;line-height:1.5}.card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:16px;margin-top:14px}@media(max-width:600px){.desktop{padding:12px;gap:10px}.icon{width:76px}.window{left:4%;top:5%;width:92%;height:76%}}
+</style>
+</head>
+<body>
+<div class="os">
+<div class="wall"></div>
+<main class="desktop" id="desktop" aria-label="Escritorio de SoyPerritoOS">
+<button class="icon" data-app="about"><span class="emoji">🐶</span><span class="label">SoyPerritoOS</span></button>
+<button class="icon" data-app="files"><span class="emoji">📁</span><span class="label">Archivos</span></button>
+<button class="icon" data-app="notes"><span class="emoji">📝</span><span class="label">Notas</span></button>
+<button class="icon" data-app="calc"><span class="emoji">🧮</span><span class="label">Calculadora</span></button>
+<button class="icon" data-app="browser"><span class="emoji">🌐</span><span class="label">Navegador</span></button>
+</main>
+<div id="windows"></div>
+<div id="menu" class="menu hidden">
+<h2>🐶 SoyPerritoOS</h2>
+<button data-app="about">ℹ️ Acerca de SoyPerritoOS</button><button data-app="files">📁 Archivos</button><button data-app="notes">📝 Bloc de notas</button><button data-app="calc">🧮 Calculadora</button><button data-app="browser">🌐 Abrir ChatGPT</button>
+</div>
+<footer class="taskbar"><button class="start" id="start" aria-label="Menú Inicio">🐶</button><button class="task" data-app="about">🏠</button><button class="task" data-app="files">📁</button><button class="task" data-app="notes">📝</button><span class="clock" id="clock"></span></footer>
+</div>
+<script>
+(()=>{const root=document.querySelector('.os'),wins=document.getElementById('windows'),menu=document.getElementById('menu');let z=10;
+const apps={about:['🐶 SoyPerritoOS',`<div class="welcome"><b>Bienvenido a SoyPerritoOS.</b><p>Este es el comienzo de tu propio PC virtual. Está separado de SoyPerritoProProYT-Console y preparado para adaptarse a móvil, tablet, ordenador y pantallas grandes.</p><div class="card">🚀 Versión 1.0<br>👤 SoyPerritoProProYT<br>🌐 Sistema web multiplataforma</div></div>`],files:['📁 Archivos',`<div class="card">📂 Documentos<br>📂 Imágenes<br>📂 Juegos<br>📂 Descargas</div><p>Explorador visual inicial. Iremos añadiendo archivos reales del navegador más adelante.</p>`],notes:['📝 Bloc de notas',`<textarea class="notes" id="note" placeholder="Escribe aquí..."></textarea>`],calc:['🧮 Calculadora',`<div class="calc"><input id="display" readonly value="0"><div class="grid">${['7','8','9','÷','4','5','6','×','1','2','3','−','0','.','C','+'].map(x=>'<button type="button">'+x+'</button>').join('')}</div></div>`],browser:['🌐 Navegador',`<div class="welcome"><p>Acceso rápido a ChatGPT:</p><button id="chat" style="padding:12px 16px;border:0;border-radius:10px;cursor:pointer">🤖 Abrir ChatGPT</button></div>`]};
+function openApp(name){const a=apps[name]||apps.about;const w=document.createElement('section');w.className='window';w.style.zIndex=++z;w.innerHTML='<div class="bar"><span class="title">'+a[0]+'</span><button class="close" aria-label="Cerrar">×</button></div><div class="content">'+a[1]+'</div>';wins.appendChild(w);w.querySelector('.close').onclick=()=>w.remove();w.addEventListener('pointerdown',()=>w.style.zIndex=++z);if(name==='calc'){const d=w.querySelector('#display');let val='';w.querySelectorAll('.grid button').forEach(b=>b.onclick=()=>{const x=b.textContent;if(x==='C'){val='';d.value='0';return}val+=x.replace('×','*').replace('÷','/').replace('−','-');try{d.value=val||'0'}catch{d.value='0'}})}if(name==='browser')w.querySelector('#chat').onclick=()=>window.open('https://chatgpt.com/','_blank') }
+root.querySelectorAll('[data-app]').forEach(b=>b.addEventListener('click',()=>openApp(b.dataset.app)));document.getElementById('start').onclick=()=>menu.classList.toggle('hidden');menu.querySelectorAll('[data-app]').forEach(b=>b.onclick=()=>{menu.classList.add('hidden');openApp(b.dataset.app)});function clock(){const d=new Date();document.getElementById('clock').innerHTML=d.toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'})+'<br>'+d.toLocaleDateString('es-ES',{day:'2-digit',month:'2-digit'})}clock();setInterval(clock,1000)})()
+</script>
+</body>
+</html>
